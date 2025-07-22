@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numerix Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f8cdda, #1d2b64);
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      position: relative;
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      color: #fff;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+      color: #000;
+    }
+    h2 {
+      font-size: 1em;
+      color: red;
+      margin: 10px 0;
+    }
+    .login-button {
+      position: relative;
+      width: 80%;
+      margin: 10px auto;
+      border-radius: 50px;
+      height: 50px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    .login-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    img {
+      width: 100%;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="background.jpg" alt="Login Design">
+    
+    <!-- Transparent Buttons -->
+    <button class="login-button" style="top: -250px; left: 0; position: absolute;" onclick="facebookLogin()"></button>
+    <button class="login-button" style="top: -180px; left: 0; position: absolute;" onclick="googleLogin()"></button>
+    <button class="login-button" style="top: -180px; left: 220px; position: absolute;" onclick="phoneLogin()"></button>
+  </div>
+
+  <script>
+    function facebookLogin() {
+      window.location.href = "https://www.facebook.com/login";
+    }
+    function googleLogin() {
+      window.location.href = "https://accounts.google.com/signin";
+    }
+    function phoneLogin() {
+      alert("Phone Login Clicked - Implement Your Phone Auth Here");
+    }
+  </script>
+
+</body>
+</html>
