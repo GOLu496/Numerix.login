@@ -3,79 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Numerix Login</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #f8cdda, #1d2b64);
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    .container {
-      position: relative;
-      width: 90%;
-      max-width: 400px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      padding: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      color: #fff;
-    }
-    h1 {
-      font-size: 2em;
-      margin: 0;
-      color: #000;
-    }
-    h2 {
-      font-size: 1em;
-      color: red;
-      margin: 10px 0;
-    }
-    .login-button {
-      position: relative;
-      width: 80%;
-      margin: 10px auto;
-      border-radius: 50px;
-      height: 50px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-    }
-    .login-button:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    img {
-      width: 100%;
-      border-radius: 20px;
-    }
-  </style>
+  <title>Numerix Login with Database</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
 </head>
 <body>
 
-  <div class="container">
-    <img src="background.jpg" alt="Login Design">
-    
-    <!-- Transparent Buttons -->
-    <button class="login-button" style="top: -250px; left: 0; position: absolute;" onclick="facebookLogin()"></button>
-    <button class="login-button" style="top: -180px; left: 0; position: absolute;" onclick="googleLogin()"></button>
-    <button class="login-button" style="top: -180px; left: 220px; position: absolute;" onclick="phoneLogin()"></button>
-  </div>
+  <h2>Welcome to Numerix</h2>
+  <button onclick="loginWithGoogle()">Login with Google</button>
 
   <script>
-    function facebookLogin() {
-      window.location.href = "https://www.facebook.com/login";
-    }
-    function googleLogin() {
-      window.location.href = "https://accounts.google.com/signin";
-    }
-    function phoneLogin() {
-      alert("Phone Login Clicked - Implement Your Phone Auth Here");
+    // ✅ Step 1 — Paste your Firebase Config here
+   const firebaseConfig = {
+  apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
+  authDomain: "numerix-80316.firebaseapp.com",
+  databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "numerix-80316",
+  storageBucket: "numerix-80316.firebasestorage.app",
+  messagingSenderId: "441337086133",
+  appId: "1:441337086133:web:5fcc3e85f381601821fefc",
+  measurementId: "G-K291MLNV2W"
+};
+
+    // ✅ Step 2 — Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+
+    // ✅ Step 3 — Google Login + Save to Database
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(result => {
+          const user = result.user;
+          alert("Welcome " + user.displayName);
+
+          // ✅ Save user data to Realtime Database
+          database.ref('Users/' + user.uid).set({
+            name: user.displayName,
+            email: user.email,
+            profilePic: user.photoURL
+          });
+
+        })
+        .catch(error => {
+          alert("Error: " + error.message);
+        });
     }
   </script>
 
