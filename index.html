@@ -42,7 +42,8 @@
           email: user.email,
           profilePic: user.photoURL
         });
-
+        window.AppInventor.setWebViewString("login_success"):
+        
       }).catch(function(error) {
         alert("Error: " + error.message);
       });
