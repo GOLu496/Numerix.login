@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Numerix Login with Database</title>
+  <title>Numerix Google Login</title>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  <!-- Firebase v8 SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 </head>
 <body>
@@ -18,41 +18,34 @@
 
   <script>
     // ✅ Step 1 — Paste your Firebase Config here
-   const firebaseConfig = {
-  apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
-  authDomain: "numerix-80316.firebaseapp.com",
-  databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "numerix-80316",
-  storageBucket: "numerix-80316.firebasestorage.app",
-  messagingSenderId: "441337086133",
-  appId: "1:441337086133:web:5fcc3e85f381601821fefc",
-  measurementId: "G-K291MLNV2W"
+    var firebaseConfig = {
+  apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
+  authDomain: "numerix-80316.firebaseapp.com",
+  databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "numerix-80316",
+  storageBucket: "numerix-80316.firebasestorage.app",
+  messagingSenderId: "441337086133",
+  appId: "1:441337086133:web:5fcc3e85f381601821fefc",
+  measurementId: "G-K291MLNV2W"
 };
+    firebase.initializeApp(firebaseConfig);
 
-    // ✅ Step 2 — Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const database = firebase.database();
-
-    // ✅ Step 3 — Google Login + Save to Database
     function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(result => {
-          const user = result.user;
-          alert("Welcome " + user.displayName);
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+        var user = result.user;
+        alert("Welcome " + user.displayName);
 
-          // ✅ Save user data to Realtime Database
-          database.ref('Users/' + user.uid).set({
-            name: user.displayName,
-            email: user.email,
-            profilePic: user.photoURL
-          });
-
-        })
-        .catch(error => {
-          alert("Error: " + error.message);
+        // ✅ Save user info to Realtime Database
+        firebase.database().ref('Users/' + user.uid).set({
+          name: user.displayName,
+          email: user.email,
+          profilePic: user.photoURL
         });
+
+      }).catch(function(error) {
+        alert("Error: " + error.message);
+      });
     }
   </script>
 
