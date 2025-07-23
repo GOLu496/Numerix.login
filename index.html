@@ -2,14 +2,15 @@
 <html>
   <head>
     <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  </head>
+  <body>
+    <h2>Login Page</h2>
+    <button onclick="googleLogin()">Login with Google</button>
 
     <script>
-   const firebaseConfig = {
+     const firebaseConfig = {
   apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
   authDomain: "numerix-80316.firebaseapp.com",
   databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -21,32 +22,21 @@
 };
 
       firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const provider = new firebase.auth.GoogleAuthProvider();
 
-      // If coming back from redirect
-      auth.getRedirectResult()
-        .then((result) => {
-          if (result.user) {
-            // Notify Kodular WebView
-            if (window.AppInventor) {
-              window.AppInventor.setWebViewString("login_success");
-            } else {
-              document.body.innerHTML = "<h2>Login Successful</h2>";
-            }
-          }
-        })
-        .catch((error) => {
-          console.error(error);
+      function googleLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+          const user = result.user;
+          const userInfo = {
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL
+          };
+          window.AppInventor.setWebViewString(JSON.stringify(userInfo));
+        }).catch((error) => {
+          alert("Login Failed: " + error.message);
         });
-
-      function signIn() {
-        auth.signInWithRedirect(provider);
       }
     </script>
-  </head>
-  <body>
-    <h2>Login Page</h2>
-    <button onclick="signIn()">Login with Google</button>
   </body>
 </html>
