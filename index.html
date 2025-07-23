@@ -2,10 +2,14 @@
 <html>
   <head>
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth.js"></script>
+
     <script>
-     const firebaseConfig = {
+   const firebaseConfig = {
   apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
   authDomain: "numerix-80316.firebaseapp.com",
   databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -15,23 +19,29 @@
   appId: "1:441337086133:web:5fcc3e85f381601821fefc",
   measurementId: "G-K291MLNV2W"
 };
+
       firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
       const provider = new firebase.auth.GoogleAuthProvider();
 
-      function signIn() {
-        firebase.auth().signInWithPopup(provider)
-          .then((result) => {
-            // Successful login
+      // If coming back from redirect
+      auth.getRedirectResult()
+        .then((result) => {
+          if (result.user) {
+            // Notify Kodular WebView
             if (window.AppInventor) {
               window.AppInventor.setWebViewString("login_success");
             } else {
-              alert("Login successful!");
+              document.body.innerHTML = "<h2>Login Successful</h2>";
             }
-          })
-          .catch((error) => {
-            console.error(error);
-            alert("Login failed!");
-          });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      function signIn() {
+        auth.signInWithRedirect(provider);
       }
     </script>
   </head>
