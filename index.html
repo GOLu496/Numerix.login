@@ -32,17 +32,19 @@
 
     function loginWithGoogle() {
       var provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then(function(result) {
+      firebase.auth().signInWithRedirect(provider).then(function(result) {
         var user = result.user;
         alert("Welcome " + user.displayName);
 
         // ✅ Save user info to Realtime Database
         firebase.database().ref('Users/' + user.uid).set({
-          name: user.displayName,
-          email: user.email,
-          profilePic: user.photoURL
-        });
-        window.AppInventor.setWebViewString("login_success"):
+      name: user.displayName,
+      email: user.email,
+      profilePic: user.photoURL
+    });
+
+    window.AppInventor.setWebViewString("login_success");
+  }
         
       }).catch(function(error) {
         alert("Error: " + error.message);
