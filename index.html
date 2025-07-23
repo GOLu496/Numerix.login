@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Login with Google</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-
-  <script>
-   const firebaseConfig = {
+  <head>
+    <title>Login</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth.js"></script>
+    <script>
+     const firebaseConfig = {
   apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
   authDomain: "numerix-80316.firebaseapp.com",
   databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -17,57 +15,28 @@
   appId: "1:441337086133:web:5fcc3e85f381601821fefc",
   measurementId: "G-K291MLNV2W"
 };
+      firebase.initializeApp(firebaseConfig);
+      const provider = new firebase.auth.GoogleAuthProvider();
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    function startLogin() {
-      auth.signInWithRedirect(provider);
-    }
-
-    auth.getRedirectResult()
-      .then((result) => {
-        if (result.user) {
-          console.log("Login Success:", result.user.email);
-
-          // ✅ Send success signal to Kodular app
-          if (window.AppInventor) {
-            window.AppInventor.setWebViewString("login_success");
-          }
-
-          // ✅ Redirect to home.html or any page
-          window.location.href = "home.html";
-        }
-      })
-      .catch((error) => {
-        console.error("Login Error:", error);
-      });
-  </script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 100px;
-    }
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      background-color: #4285F4;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #3367D6;
-    }
-  </style>
-</head>
-<body>
-  <h2>Login with Google</h2>
-  <button onclick="startLogin()">Sign in with Google</button>
-</body>
+      function signIn() {
+        firebase.auth().signInWithPopup(provider)
+          .then((result) => {
+            // Successful login
+            if (window.AppInventor) {
+              window.AppInventor.setWebViewString("login_success");
+            } else {
+              alert("Login successful!");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            alert("Login failed!");
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Login Page</h2>
+    <button onclick="signIn()">Login with Google</button>
+  </body>
 </html>
