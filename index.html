@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Login</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  </head>
-  <body>
-    <h2>Login Page</h2>
-    <button onclick="googleLogin()">Login with Google</button>
+<head>
+  <title>Login with Google</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
 
-    <script>
-     const firebaseConfig = {
+  <script>
+  const firebaseConfig = {
   apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
   authDomain: "numerix-80316.firebaseapp.com",
   databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -21,22 +17,34 @@
   measurementId: "G-K291MLNV2W"
 };
 
-      firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
+    const provider = new firebase.auth.GoogleAuthProvider();
 
-      function googleLogin() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then((result) => {
+    function signIn() {
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
           const user = result.user;
-          const userInfo = {
+          const userData = {
             name: user.displayName,
             email: user.email,
             photo: user.photoURL
           };
-          window.AppInventor.setWebViewString(JSON.stringify(userInfo));
-        }).catch((error) => {
-          alert("Login Failed: " + error.message);
+
+          const dataStr = JSON.stringify(userData);
+          if (window.AppInventor) {
+            window.AppInventor.setWebViewString(dataStr);
+          } else {
+            alert("Logged in: " + dataStr); // fallback for testing in browser
+          }
+        })
+        .catch((error) => {
+          alert("Login Error: " + error.message);
         });
-      }
-    </script>
-  </body>
+    }
+  </script>
+</head>
+<body style="text-align:center; margin-top:100px;">
+  <h2>Login with Google</h2>
+  <button onclick="signIn()" style="padding:10px 20px; font-size:18px;">Login with Google</button>
+</body>
 </html>
