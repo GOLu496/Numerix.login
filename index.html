@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Login</title>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>Login with Google</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
 
-    <script>
-     const firebaseConfig = {
+  <script>
+   const firebaseConfig = {
   apiKey: "AIzaSyC100i-P3BxKAe6dmN1dI2OGC8DNpTpW2k",
   authDomain: "numerix-80316.firebaseapp.com",
   databaseURL: "https://numerix-80316-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -17,32 +18,56 @@
   measurementId: "G-K291MLNV2W"
 };
 
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
-      function login() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithRedirect(provider);
-      }
+    function startLogin() {
+      auth.signInWithRedirect(provider);
+    }
 
-      // Check for redirect result after login
-      auth.getRedirectResult().then((result) => {
+    auth.getRedirectResult()
+      .then((result) => {
         if (result.user) {
-          // Success: Send signal to Kodular app
+          console.log("Login Success:", result.user.email);
+
+          // ✅ Send success signal to Kodular app
           if (window.AppInventor) {
             window.AppInventor.setWebViewString("login_success");
-          } else {
-            document.body.innerHTML = "<h2>Login Successful!<br>You can close this tab.</h2>";
           }
+
+          // ✅ Redirect to home.html or any page
+          window.location.href = "home.html";
         }
-      }).catch((error) => {
-        console.error(error);
-        document.body.innerHTML = `<h3 style="color:red;">Error: ${error.message}</h3>`;
+      })
+      .catch((error) => {
+        console.error("Login Error:", error);
       });
-    </script>
-  </head>
-  <body style="text-align:center; margin-top:100px;">
-    <h1>Login Page</h1>
-    <button onclick="login()" style="padding: 15px 30px; font-size: 18px;">Login with Google</button>
-  </body>
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3367D6;
+    }
+  </style>
+</head>
+<body>
+  <h2>Login with Google</h2>
+  <button onclick="startLogin()">Sign in with Google</button>
+</body>
 </html>
